@@ -34,4 +34,6 @@ RUN npm install
 COPY app .
 
 EXPOSE 5900
+VOLUME
+VOLUME ["app/tokens"]
 CMD xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" npm start

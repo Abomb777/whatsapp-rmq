@@ -65,6 +65,15 @@ function start(client) {
 	  rmq.sendMessage('from'+phoneNumber, 'aaa', {app:'whatsapp', id:phoneNumber, event:'message', data:{...message,decodedData}});
 	  if(typeof message.mimetype !== 'undefined') console.log(message.mimetype);
 	});
+	client.onStateChange(state => {
+	  rmq.sendMessage('from'+phoneNumber, 'aaa', {app:'whatsapp', id:phoneNumber, event:'StateChange', data:{...state}});
+	});
+	client.onAck(ack => {
+	  rmq.sendMessage('from'+phoneNumber, 'aaa', {app:'whatsapp', id:phoneNumber, event:'ack', data:{...ack}});
+	});
+	client.onAddedToGroup(chatEvent => {
+	  rmq.sendMessage('from'+phoneNumber, 'aaa', {app:'whatsapp', id:phoneNumber, event:'AddedToGroup', data:{...chatEvent}});
+	});
 }
 
 
