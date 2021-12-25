@@ -25,7 +25,7 @@ venom
       console.log('Session name: ', session);
     },
     {
-      folderNameToken: 'tokens', //folder name when saving tokens
+      folderNameToken: 'tokens/'+phoneNumber, //folder name when saving tokens
       mkdirFolderToken: '', //folder directory tokens, just inside the venom folder, example:  { mkdirFolderToken: '/node_modules', } //will save the tokens folder in the node_modules directory
       headless: false, // Headless chrome
 //      devtools: false, // Open devtools by default
@@ -76,18 +76,34 @@ function start(client) {
 	});
 }
 
-
-async function sendMsg(msg,reply) {
-	let MQdata = JSON.parse(msg);
-	console.log(MQdata)
-	await WappClient.reply(
-  MQdata.data.original.from,
-  MQdata.data.repl,
-  MQdata.data.original.id,
-).then((result) => {
+async function privateMsg(msg) {
+	console.log("MSG PRIVATE")
+  let MQdata = JSON.parse(msg);
+  await WappClient
+  .sendText(MQdata.data.original.author, (MQdata.data.text?MQdata.data.text:MQdata.data.repl))
+  .then((result) => {
     console.log('Result: ', result); //return object success
-}).catch((erro) => {
+  })
+  .catch((erro) => {
     console.error('Error when sending: ', erro); //return object error
-});
+  });
+}
 
+async function sendMsg(msg) {
+	let MQdata = JSON.parse(msg);
+	console.log(MQdata.data.event)
+	console.log({from: MQdata.data.original.author,
+		  text:(MQdata.data.text?MQdata.data.text:MQdata.data.repl),
+		  id:MQdata.data.original.id});
+	if(MQdata.event=="replay"){
+		await WappClient.reply(
+		  MQdata.data.original.author,
+		  (MQdata.data.text?MQdata.data.text:MQdata.data.repl),
+		  ""+MQdata.data.original.id
+		).then((result) => {
+			console.log('Result: ', result); //return object success
+		}).catch((erro) => {
+			console.error('Error when sending: ', erro); //return object error
+		});
+	} else privateMsg(msg);
 }
