@@ -32,6 +32,7 @@ venom
       //Create session wss return "serverClose" case server for close
       console.log('Session name: ', session);
 	  if(statusSession==="browserClose") {
+		  console.log('KILL SIGNAL!!!');
 		  process.exit(1)
 	  }
     },
