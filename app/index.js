@@ -16,13 +16,14 @@ venom
     'sessionName',
 	(base64Qrimg, asciiQR, attempts, urlCode) => {
 	  rmq.sendMessage('from'+phoneNumber, 'aaa', {
-			app:'whatsapp',
-			id:phoneNumber,
-			event:'qrrequest',
-			attempts:attempts,
-			terminalqr:asciiQR,
-			base64:base64Qrimg,
-			urlCode:urlCode
+			version: config.version,
+			app: 'whatsapp',
+			id: phoneNumber,
+			event: 'qrrequest',
+			attempts: attempts,
+			terminalqr: asciiQR,
+			base64: base64Qrimg,
+			urlCode: urlCode
 		});
 	  console.log(asciiQR);
     },
