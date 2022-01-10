@@ -15,7 +15,15 @@ venom
   .create(
     'sessionName',
 	(base64Qrimg, asciiQR, attempts, urlCode) => {
-	  rmq.sendMessage('from'+phoneNumber, 'aaa', {app:'whatsapp', id:phoneNumber, event:'qrrequest', attempts:attempts, terminalqr:asciiQR, base64:base64Qrimg,urlCode:urlCode});
+	  rmq.sendMessage('from'+phoneNumber, 'aaa', {
+			app:'whatsapp',
+			id:phoneNumber,
+			event:'qrrequest',
+			attempts:attempts,
+			terminalqr:asciiQR,
+			base64:base64Qrimg,
+			urlCode:urlCode
+		});
 	  console.log(asciiQR);
     },
     (statusSession, session) => {
@@ -23,6 +31,9 @@ venom
       //return isLogged || notLogged || browserClose || qrReadSuccess || qrReadFail || autocloseCalled || desconnectedMobile || deleteToken || chatsAvailable || deviceNotConnected || serverWssNotConnected || noOpenBrowser
       //Create session wss return "serverClose" case server for close
       console.log('Session name: ', session);
+	  if(statusSession==="browserClose") {
+		  process.exit(1)
+	  }
     },
     {
       folderNameToken: 'tokens/'+phoneNumber, //folder name when saving tokens
