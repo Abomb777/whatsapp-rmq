@@ -106,9 +106,9 @@ async function privateMsg(msg) {
 async function sendMsg(msg) {
 	let MQdata = JSON.parse(msg);
 	console.log(MQdata.data.event)
-	console.log({from: MQdata.data.original.author,
-		  text:(MQdata.data.text?MQdata.data.text:MQdata.data.repl),
-		  id:MQdata.data.original.id});
+//	console.log({from: MQdata.data.original.author,
+//		  text:(MQdata.data.text?MQdata.data.text:MQdata.data.repl),
+//		  id:MQdata.data.original.id});
 	if(MQdata.event=="replay"){
 		await WappClient.reply(
 		  MQdata.data.original.author,
