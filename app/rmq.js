@@ -15,7 +15,7 @@ class RabbitMQ {
     this.connectRabbitMq()
   }
   async connectRabbitMq() {
-	 const rabbitMqUrl = process.env.RMQURL;
+	 const rabbitMqUrl = process.env.RMQURL || config.rmq;
      //const rabbitMqUrl = config.rabbit.host;
     console.log('Starting RabbitMQ connection :', rabbitMqUrl);
 	try {

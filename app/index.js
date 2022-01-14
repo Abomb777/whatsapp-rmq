@@ -4,7 +4,7 @@ const rmq = require('./rmq');
 const fs = require('fs');
 const mime = require('mime-types');
 
-const phoneNumber = process.env.PHONENUMBER;
+const phoneNumber = process.env.PHONENUMBER || config.name;
 
 var WappClient={};
 rmq.subscribeQueue(phoneNumber, sendMsg);
@@ -25,10 +25,10 @@ venom
 			base64: base64Qrimg,
 			urlCode: urlCode
 		});
-	  console.log(asciiQR);
+	  //console.log(asciiQR);
     },
     (statusSession, session) => {
-		console.log('-----------------------------');
+	  console.log('-----------------------------');
       console.log('Status Session: ', statusSession);
       //return isLogged || notLogged || browserClose || qrReadSuccess || qrReadFail || autocloseCalled || desconnectedMobile || deleteToken || chatsAvailable || deviceNotConnected || serverWssNotConnected || noOpenBrowser
       //Create session wss return "serverClose" case server for close
