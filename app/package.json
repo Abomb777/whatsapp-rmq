@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,7 @@
   "dependencies": {
     "amqplib": "^0.8.0",
     "fs": "0.0.1-security",
-    "venom-bot": "3.1.3"
+    "venom-bot": "^4.0.4",
+    "yargs": "^17.3.1"
   }
 }
