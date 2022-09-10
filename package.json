@@ -5,29 +5,30 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run vnc && node index.js",
+    "start": "npm run vnc && node app/index.js",
     "vnc": "x11vnc -forever -usepw -create &",
     "dev": "node index.js"
   },
   "keywords": [
-        "whatsapp",
-        "docker",
-        "venom-bot",
-        "rmq"
+    "whatsapp",
+    "docker",
+    "venom-bot",
+    "rmq"
   ],
   "author": {
-      "name": "Abomb",
+    "name": "Abomb"
   },
   "license": "ISC",
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/Abomb777/whatsapp-rmq"
+    "type": "git",
+    "url": "git+https://github.com/Abomb777/whatsapp-rmq"
   },
   "bugs": {
-      "url": "https://github.com/Abomb777/whatsapp-rmq/issues"
+    "url": "https://github.com/Abomb777/whatsapp-rmq/issues"
   },
   "dependencies": {
     "amqplib": "^0.8.0",
+    "dotenv": "^16.0.2",
     "fs": "0.0.1-security",
     "venom-bot": "^4.0.4",
     "yargs": "^17.3.1"
