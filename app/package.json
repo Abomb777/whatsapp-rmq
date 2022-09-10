@@ -1,7 +1,7 @@
 {
   "name": "app",
   "version": "1.0.3",
-  "description": "",
+  "description": "Docker whatsapp based venom-bot working via rmq",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,8 +9,23 @@
     "vnc": "x11vnc -forever -usepw -create &",
     "dev": "node index.js"
   },
-  "author": "",
+  "keywords": [
+        "whatsapp",
+        "docker",
+        "venom-bot",
+        "rmq"
+  ],
+  "author": {
+      "name": "Abomb",
+  },
   "license": "ISC",
+  "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Abomb777/whatsapp-rmq"
+  },
+  "bugs": {
+      "url": "https://github.com/Abomb777/whatsapp-rmq/issues"
+  },
   "dependencies": {
     "amqplib": "^0.8.0",
     "fs": "0.0.1-security",
