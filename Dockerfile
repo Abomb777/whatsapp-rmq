@@ -2,8 +2,8 @@ FROM node:14
 #FROM billyfong2007/node-face-recognition:last
 
 # Create app directory
-WORKDIR /usr/src/app
-COPY app/package.json ./
+WORKDIR /usr/src/whatsapp/
+COPY package.json ./
 
 ARG PHONENUMBER
 ENV PHONENUMBER=${PHONENUMBER}
@@ -34,5 +34,5 @@ RUN npm install
 COPY app .
 
 EXPOSE 5900
-VOLUME /usr/src/app/tokens
+VOLUME /usr/src/whatsapp/tokens
 CMD xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" npm start

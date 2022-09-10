@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "whatsapp-rmq",
   "version": "1.0.3",
   "description": "Docker whatsapp based venom-bot working via rmq",
   "main": "index.js",
