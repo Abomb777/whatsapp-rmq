@@ -1,6 +1,6 @@
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
-const projectVersion = require('./package.json');
+const projectVersion = require('../package.json');
 
 const argv = yargs(hideBin(process.argv)).argv;
 console.log(argv);
@@ -10,6 +10,6 @@ for (const k in argv) {
 }
 
 module.exports={
-	rmq: 'amqp://user1:user1@rabbitmq',
+	rmq: process.env.rmq,
 	version: projectVersion.version
 };
