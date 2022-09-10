@@ -1,6 +1,6 @@
 'use strict';
 const amqplib = require('amqplib');
-const Promise = require('bluebird');
+//const Promise = require('bluebird');
 const config = require('./config');
 //const _ = require('lodash');
 //const logger = require('./logger');
@@ -11,7 +11,7 @@ class RabbitMQ {
 	this.connectRabbitMq();
   }
   reconnectRabbitMq() {
-    console.log('reconnect_rabbit_mq')
+    console.log('reconnect_rabbit_mq');
     this.connectRabbitMq()
   }
   async connectRabbitMq() {
@@ -20,7 +20,6 @@ class RabbitMQ {
     console.log('Starting RabbitMQ connection :', rabbitMqUrl);
 	try {
 		this.handler = amqplib.connect(rabbitMqUrl, { keepAlive: true }, function(err, conn) {
-			
 			console.log('err');
 		});
 	} catch(e){
@@ -49,7 +48,7 @@ class RabbitMQ {
         .then(() => channel.close())
       )
       .catch(e=>{
-		 // console.log('ERRROR RRRR',e)
+		  console.log('ERRROR RRRR',e)
 		  setTimeout(this.reconnectRabbitMq.bind(this),3000);
 		  return 'message cannot be sent';
 	  });
