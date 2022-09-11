@@ -31,7 +31,7 @@ RUN  apt-get update \
      && chmod +x /usr/sbin/wait-for-it.sh
 
 RUN npm install
-COPY app .
+COPY app app/.
 
 EXPOSE 5900
 VOLUME /usr/src/whatsapp/tokens
