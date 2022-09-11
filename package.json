@@ -8,9 +8,9 @@
     "start": "npm run vnc && node app/index.js",
     "vnc": "x11vnc -forever -usepw -create &",
     "dev": "node index.js",
-	"docker:build": "docker build --no-cache --force-rm -t tanton/whatsapp-rmq .",
-	"docker:publish": "npm run docker:build && docker push tanton/whatsapp-rmq",
-	"publish": "lerna publish from-package --contents dist --dist-tag next --force-publish"
+    "docker:build": "docker build --no-cache --force-rm -t tanton/whatsapp-rmq .",
+    "docker:publish": "npm run docker:build && docker push tanton/whatsapp-rmq",
+    "publish": "lerna publish from-package --contents dist --dist-tag next --force-publish"
   },
   "keywords": [
     "whatsapp",
@@ -33,7 +33,7 @@
     "amqplib": "^0.8.0",
     "dotenv": "^16.0.2",
     "fs": "0.0.1-security",
-    "venom-bot": "^4.0.4",
+    "venom-bot": "^4.3.0",
     "yargs": "^17.3.1"
   }
 }

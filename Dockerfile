@@ -29,9 +29,9 @@ RUN  apt-get update \
      && rm -rf /var/lib/apt/lists/* \
      && wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /usr/sbin/wait-for-it.sh \
      && chmod +x /usr/sbin/wait-for-it.sh
-
-RUN npm install
 COPY app app/.
+RUN cd /usr/src/whatsapp/
+RUN npm install
 
 EXPOSE 5900
 VOLUME /usr/src/whatsapp/tokens
