@@ -8,7 +8,7 @@
     "start": "npm run vnc && node app/index.js",
     "vnc": "x11vnc -forever -usepw -create &",
     "dev": "node index.js",
-	"docker:build": "docker build --force-rm -t tanton/whatsapp-rmq .",
+	"docker:build": "docker build --no-cache --force-rm -t tanton/whatsapp-rmq .",
 	"docker:publish": "npm run docker:build && docker push tanton/whatsapp-rmq",
 	"publish": "lerna publish from-package --contents dist --dist-tag next --force-publish"
   },
