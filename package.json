@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run vnc && node app/index.js",
+    "format": "prettier --write \"app/*.js\"",
+    "version": "npm run format && git add -A app",
+    "postversion": "git push && git push --tags",
     "vnc": "x11vnc -forever -usepw -create &",
     "dev": "node index.js",
     "docker:build": "docker build --no-cache --force-rm -t tanton/whatsapp-rmq .",
@@ -34,6 +37,10 @@
     "dotenv": "^16.0.2",
     "fs": "0.0.1-security",
     "venom-bot": "^4.3.0",
+    "whatsapp-web.js": "^1.17.1",
     "yargs": "^17.3.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
   }
 }
