@@ -5,6 +5,7 @@ const projectVersion = require("../package.json");
 console.log("load " + projectVersion.version);
 const argv = yargs(hideBin(process.argv)).argv;
 //console.log(argv);
+//test
 for (const k in argv) {
   if (k !== "_" && k !== "$0") {
     process.env[k] = argv[k];
