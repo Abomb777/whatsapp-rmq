@@ -31,7 +31,16 @@ const client = new Client({
   /*    authStrategy: new LegacySessionAuth({
         session: sessionData
     }),*/
-  puppeteer: { headless: false },
+  puppeteer: { headless: false, args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu'
+      ] }
+   ,
   authStrategy: new LocalAuth({
     clientId: "client-one",
     dataPath: "./tokens/",
@@ -193,7 +202,8 @@ async function sendMsg(msg) {
         res(result);
         //eval('WappClient.'+MQdata.exec+'.then((await result) => {console.log(result); res(result)}).catch((erro) => {console.error(\'Error when sending '+MQdata.exec+': \', erro); })');
       });
-      console.log(">" + respo);
+      console.log("response >>>");
+      console.log(respo);
       rmq.sendMessage(
         MQdata.returnto ? MQdata.returnto : "from" + phoneNumber,
         "aaa",
