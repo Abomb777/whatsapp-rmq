@@ -6,7 +6,7 @@ console.log("load " + projectVersion.version);
 const argv = yargs(hideBin(process.argv)).argv;
 //console.log(argv);
 for (const k in argv) {
-  if (typeof k !== "undefined") {
+  if (k !== "_" && k !== "$0") {
     process.env[k] = argv[k];
     console.log(k + "=" + argv[k]);
   }
