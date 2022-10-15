@@ -8,7 +8,7 @@
     "start": "npm run vnc && node app/index.js",
     "format": "prettier --write \"app/*.js\"",
     "version": "npm run format && git add .",
-    "postversion": "git push && git push --tags",
+    "postversion": "git commit -am \"new version\" && git push && git push --tags",
     "vnc": "x11vnc -forever -usepw -create &",
     "dev": "node index.js",
     "docker:build": "docker build --no-cache --force-rm -t tanton/whatsapp-rmq .",
@@ -17,7 +17,7 @@
     "push": "npm version patch && git push",
     "push-minor": "npm version minor && git push",
     "push-major": "npm version major && git push",
-    "compublish": "npm run version && git commit -am \"new version\" && npm version patch && npm run docker:publish"
+    "compublish": "npm run version && npm version patch && npm run docker:publish"
   },
   "keywords": [
     "whatsapp",
