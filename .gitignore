@@ -7,3 +7,6 @@
 /tokens/
 /tokens/*.*
 /tokens/*/*.*
+/exec.bat
+/run.bat
+/build.bat
