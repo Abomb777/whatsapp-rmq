@@ -49,6 +49,7 @@ const client = new Client({
   }),
 });
 
+//test22
 // Save session values to the file upon successful auth
 /*client.on("authenticated", (session) => {
   sessionData = session;
