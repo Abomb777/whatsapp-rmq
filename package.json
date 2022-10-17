@@ -13,12 +13,15 @@
     "postversion": "git push && git push --tags",
     "vnc": "x11vnc -forever -usepw -create &",
     "dev": "node index.js",
+
     "docker:build": "docker build --no-cache --force-rm -t tanton/whatsapp-rmq .",
     "docker:publish": "npm run docker:build && docker push tanton/whatsapp-rmq",
     "publish": "lerna publish from-package --contents dist --dist-tag next --force-publish",
+
     "push": "npm version patch && git push",
     "push-minor": "npm version minor && git push",
     "push-major": "npm version major && git push",
+
     "compublish": "npm run uplodate && npm version patch && npm run docker:publish"
   },
   "keywords": [
