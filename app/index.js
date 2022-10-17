@@ -50,14 +50,14 @@ const client = new Client({
 });
 
 // Save session values to the file upon successful auth
-client.on("authenticated", (session) => {
+/*client.on("authenticated", (session) => {
   sessionData = session;
   fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), (err) => {
     if (err) {
       console.error(err);
     }
   });
-});
+});*/
 
 client.on("ready", () => {
   console.log("Client is ready!");
