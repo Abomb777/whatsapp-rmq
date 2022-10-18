@@ -34,13 +34,21 @@ const client = new Client({
   puppeteer: {
     headless: false,
     args: [
-      /*      "--no-sandbox",
+      "--no-sandbox",
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
       "--disable-accelerated-2d-canvas",
       "--no-first-run",
       "--no-zygote",
-      "--disable-gpu",*/
+      "--disable-gpu",
+      /*      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-extensions',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--no-first-run',
+      '--no-zygote',
+      '--disable-gpu'*/
     ],
   },
   authStrategy: new LocalAuth({
