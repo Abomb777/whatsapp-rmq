@@ -89,14 +89,23 @@ client.on("message", async (message) => {
   }
   //console.log(message)
   let decodedData = {};
-  if (message.isMedia === true || message.isMMS === true) {
-    // || message.mimetype == 'audio/ogg; codecs=opus' || (typeof message.mimetype !='undefined' && message.mimetype.match(/pdf/))
-    const buffer = await client.decryptFile(message);
-    // At this point you can do whatever you want with the buffer
-    // Most likely you want to write it into a file
-    const fileName =
-      message.from + `some-file-name.${mime.extension(message.mimetype)}`;
-    decodedData = { fileName, buffer: buffer.toString("base64") };
+  try {
+    if (message.hasMedia) {
+      const media = await message.downloadMedia();
+      decodedData = { media };
+      // do something with the media data here
+    }
+    if (message.isMedia === true || message.isMMS === true) {
+      // || message.mimetype == 'audio/ogg; codecs=opus' || (typeof message.mimetype !='undefined' && message.mimetype.match(/pdf/))
+      const buffer = await client.decryptFile(message);
+      // At this point you can do whatever you want with the buffer
+      // Most likely you want to write it into a file
+      const fileName =
+        message.from + `some-file-name.${mime.extension(message.mimetype)}`;
+      decodedData = { fileName, buffer: buffer.toString("base64") };
+    }
+  } catch (e) {
+    console.log(e);
   }
   console.log("=>");
   rmq.sendMessage("from" + phoneNumber, "aaa", {
