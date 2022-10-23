@@ -328,6 +328,6 @@ async function sendImage(to, b64, name, text) {
 }
 
 async function sendMed(to, mimetype, b64, name, text) {
-  var media = await new MessageMedia("image/jpg", b64, name || "myimage.jpg");
+  var media = await new MessageMedia(mimetype, b64, name || "myimage.jpg");
   await client.sendMessage(to, media, { caption: text });
 }
