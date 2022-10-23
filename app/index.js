@@ -73,6 +73,7 @@ client.on("ready", () => {
   WappClient = client;
   WappClient.evalonwebz = evalonwebz;
   WappClient.sendImageFromBase64 = sendImage;
+  WappClient.sendMedFromBase64 = sendMed;
   WappClient.sendText = WappClient.sendMessage;
   rmq.subscribeQueue(phoneNumber, sendMsg);
   rmq.sendMessage("from" + phoneNumber, "aaa", {
@@ -323,5 +324,10 @@ async function sendImage(to, b64, name, text) {
     b64.replace(/^.*\;base64\,/, ""),
     name || "myimage.jpg"
   );
+  await client.sendMessage(to, media, { caption: text });
+}
+
+async function sendMed(to, mimetype, b64, name, text) {
+  var media = await new MessageMedia("image/jpg", b64, name || "myimage.jpg");
   await client.sendMessage(to, media, { caption: text });
 }
