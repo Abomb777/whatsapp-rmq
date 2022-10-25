@@ -34,7 +34,7 @@ const client = new Client({
   puppeteer: {
     headless: false,
     executablePath: "/usr/bin/google-chrome-stable",
-    args: [
+    /*    args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
@@ -42,15 +42,15 @@ const client = new Client({
       "--no-first-run",
       "--no-zygote",
       "--disable-gpu",
-      /*      '--no-sandbox',
+/!*      '--no-sandbox',
       '--disable-setuid-sandbox',
       '--disable-extensions',
       '--disable-dev-shm-usage',
       '--disable-accelerated-2d-canvas',
       '--no-first-run',
       '--no-zygote',
-      '--disable-gpu'*/
-    ],
+      '--disable-gpu'*!/
+    ],*/
   },
   authStrategy: new LocalAuth({
     clientId: "client-one",
