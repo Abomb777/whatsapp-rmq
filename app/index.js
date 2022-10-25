@@ -11,6 +11,21 @@ const {
 } = require("whatsapp-web.js");
 //const { MessageMedia } = require('whatsapp-web.js');
 
+function handleError(error, inf) {
+  //if()
+  console.log("Unhandled error!");
+  console.log(error);
+  console.log(inf);
+  /*  server.stopServer();
+  setTimeout(() => {
+    server.startServer();
+    //server.setupRoutes();
+  }, 30000);*/
+}
+
+process.on("uncaughtException", handleError);
+process.on("unhandledRejection", handleError);
+
 const phoneNumber = process.env.PHONENUMBER || config.number;
 // Path where the session data will be stored
 const SESSION_FILE_PATH = "./tokens/session.json";
