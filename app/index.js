@@ -40,7 +40,7 @@ if (fs.existsSync(SESSION_FILE_PATH)) {
     sessionData = JSON.parse(data); //require(SESSION_FILE_PATH);
   } catch (e) {}
 }
-
+//test
 // Use the saved values
 const client = new Client({
   /*    authStrategy: new LegacySessionAuth({
