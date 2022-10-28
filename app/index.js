@@ -55,6 +55,9 @@ const client = new Client({
       "--disable-setuid-sandbox",
       "--disable-gpu",
       "--ignore-certificate-errors",
+      "--user-data-dir",
+      "--no-zygote",
+      "--disable-dev-shm-usage",
     ],
     /*    args: [
       "--no-sandbox",
