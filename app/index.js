@@ -48,8 +48,14 @@ const client = new Client({
     }),*/
   puppeteer: {
     headless: false,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
     executablePath: "/usr/bin/google-chrome-stable",
+    IgnoreHTTPSErrors: true,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-gpu",
+      "--ignore-certificate-errors",
+    ],
     /*    args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
