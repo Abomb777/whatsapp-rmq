@@ -1,127 +1,110 @@
 require("dotenv").config();
+const venom = require("venom-bot");
 const config = require("./config");
 const rmq = require("./rmq");
-const mime = require("mime-types");
 const fs = require("fs");
-const {
-  Client,
-  LegacySessionAuth,
-  LocalAuth,
-  MessageMedia,
-} = require("whatsapp-web.js");
-//const { MessageMedia } = require('whatsapp-web.js');
-
-function handleError(error, inf) {
-  //if()
-  console.log("Unhandled error!");
-  console.log(error);
-  console.log(inf);
-  /*  server.stopServer();
-  setTimeout(() => {
-    server.startServer();
-    //server.setupRoutes();
-  }, 30000);*/
-}
-
-process.on("uncaughtException", handleError);
-process.on("unhandledRejection", handleError);
+const mime = require("mime-types");
 
 const phoneNumber = process.env.PHONENUMBER || config.number;
-// Path where the session data will be stored
-const SESSION_FILE_PATH = "./tokens/session.json";
-
+var wap_status = {};
 var WappClient = {};
 
-// Load the session data if it has been previously saved
-let sessionData;
-if (fs.existsSync(SESSION_FILE_PATH)) {
-  const data = fs.readFileSync(SESSION_FILE_PATH, "utf8");
-  try {
-    sessionData = JSON.parse(data); //require(SESSION_FILE_PATH);
-  } catch (e) {}
-}
-//test111
-// Use the saved values
-const client = new Client({
-  /*    authStrategy: new LegacySessionAuth({
-        session: sessionData
-    }),*/
-  puppeteer: {
-    headless: false,
-    executablePath: "/usr/bin/google-chrome-stable",
-    IgnoreHTTPSErrors: true,
-    /*    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-gpu",
-      "--ignore-certificate-errors",
-      "--user-data-dir",
-      "--no-zygote",
-      "--disable-dev-shm-usage",
-    ],*/
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-accelerated-2d-canvas",
-      "--no-first-run",
-      "--no-zygote",
-      "--disable-gpu",
-      /*      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-extensions',
-      '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--no-first-run',
-      '--no-zygote',
-      '--disable-gpu'*/
-    ],
-  },
-  authStrategy: new LocalAuth({
-    clientId: "client-one",
-    dataPath: "./tokens/",
-  }),
-});
+console.log("APP LOAD");
 
-//test22
-// Save session values to the file upon successful auth
-/*client.on("authenticated", (session) => {
-  sessionData = session;
-  fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), (err) => {
-    if (err) {
-      console.error(err);
+venom
+  .create(
+    "sessionName" + phoneNumber,
+    (base64Qrimg, asciiQR, attempts, urlCode) => {
+      rmq.sendMessage("from" + phoneNumber, "aaa", {
+        version: config.version,
+        app: "whatsapp",
+        id: phoneNumber,
+        event: "qrrequest",
+        attempts: attempts,
+        terminalqr: asciiQR,
+        base64: base64Qrimg,
+        urlCode: urlCode,
+      });
+      //console.log(asciiQR);
+    },
+    (statusSession, session) => {
+      console.log("-----------------------------");
+      console.log("Status Session: ", statusSession);
+      //return isLogged || notLogged || browserClose || qrReadSuccess || qrReadFail || autocloseCalled || desconnectedMobile || deleteToken || chatsAvailable || deviceNotConnected || serverWssNotConnected || noOpenBrowser
+      //Create session wss return "serverClose" case server for close
+      wap_status = statusSession;
+      if (session) console.log("Session name: ", session);
+      if (statusSession === "browserClose") {
+        console.log("KILL SIGNAL!!!");
+        process.exit(1);
+      }
+    },
+    {
+      folderNameToken: "tokens" + phoneNumber, //folder name when saving tokens
+      mkdirFolderToken: "tokens", //folder directory tokens, just inside the venom folder, example:  { mkdirFolderToken: '/node_modules', } //will save the tokens folder in the node_modules directory
+      headless: false, // Headless chrome
+      //      devtools: false, // Open devtools by default
+      //      useChrome: true, // If false will use Chromium instance
+      debug: false, // Opens a debug session
+      //      logQR: true, // Logs QR automatically in terminal
+      //      browserWS: '', // If u want to use browserWSEndpoint
+      //      browserArgs: [''], //Original parameters  ---Parameters to be added into the chrome browser instance
+      //      puppeteerOptions: {}, // Will be passed to puppeteer.launch
+      disableSpins: true, // Will disable Spinnies animation, useful for containers (docker) for a better log
+      disableWelcome: true, // Will disable the welcoming message which appears in the beginning
+      //      updatesLog: true, // Logs info updates automatically in terminal
+      //      autoClose: 60000, // Automatically closes the venom-bot only when scanning the QR code (default 60 seconds, if you want to turn it off, assign 0 or false)
+      //      createPathFileToken: false, //creates a folder when inserting an object in the client's browser, to work it is necessary to pass the parameters in the function create browserSessionToken
+
+      //      multidevice: false, // for version not multidevice use false.(default: true)
+      //      folderNameToken: 't', //folder name when saving tokens
+      //      mkdirFolderToken: '', //folder directory tokens, just inside the venom folder, example:  { mkdirFolderToken: '/node_modules', } //will save the tokens folder in the node_modules directory
+      //      headless: true, // Headless chrome
+      devtools: false, // Open devtools by default
+      //      useChrome: true, // If false will use Chromium instance
+      //      debug: false, // Opens a debug session
+      //      logQR: true, // Logs QR automatically in terminal
+      //     browserWS: '', // If u want to use browserWSEndpoint
+      //      browserArgs: ['--no-sandbox','--disable-dev-shm-usage'], //Original parameters  ---Parameters to be added into the chrome browser instance
+      //      puppeteerOptions: {}, // Will be passed to puppeteer.launch
+      //      disableSpins: true, // Will disable Spinnies animation, useful for containers (docker) for a better log
+      //      disableWelcome: true, // Will disable the welcoming message which appears in the beginning
+      //      updatesLog: true, // Logs info updates automatically in terminal
+      //      autoClose: 60000, // Automatically closes the venom-bot only when scanning the QR code (default 60 seconds, if you want to turn it off, assign 0 or false)
+      //      createPathFileToken: false, // creates a folder when inserting an object in the client's browser, to work it is necessary to pass the parameters in the function create browserSessionToken
+      //      chromiumVersion: '818858', // Version of the browser that will be used. Revision strings can be obtained from omahaproxy.appspot.com.
+      //      addProxy: [''], // Add proxy server exemple : [e1.p.webshare.io:01, e1.p.webshare.io:01]
+      //      userProxy: '', // Proxy login username
+      //      userPass: '' // Proxy password
     }
-  });
-});*/
+  )
+  .then((client) => {
+    WappClient = client;
+    WappClient.sendMsgg = sendMsgg;
+    WappClient.addclient = addclient;
+    WappClient.evalonweb = evalonweb;
+    WappClient.evalonwebr = evalonwebr;
+    WappClient.evalonwebw = evalonwebw;
+    WappClient.evalonwebz = evalonwebz;
+    start(client);
+    rmq.subscribeQueue(phoneNumber, sendMsg);
 
-client.on("ready", () => {
-  console.log("Client is ready!");
-  WappClient = client;
-  WappClient.evalonwebz = evalonwebz;
-  WappClient.sendImageFromBase64 = sendImage;
-  WappClient.sendMedFromBase64 = sendMed;
-  WappClient.sendText = WappClient.sendMessage;
-  rmq.subscribeQueue(phoneNumber, sendMsg);
-  rmq.sendMessage("from" + phoneNumber, "aaa", {
-    app: "whatsapp",
-    id: phoneNumber,
-    event: "app load",
-    data: "Starting " + phoneNumber,
+    rmq.sendMessage("from" + phoneNumber, "aaa", {
+      app: "whatsapp",
+      id: phoneNumber,
+      event: "app load",
+      data: "Starting " + phoneNumber,
+    });
+  })
+  .catch((erro) => {
+    console.log(erro);
   });
-});
-
-client.on("message", async (message) => {
-  if (message.body == "!ping") {
-    message.reply("pong");
-  }
-  //console.log(message)
-  let decodedData = {};
-  try {
-    if (message.hasMedia) {
-      const media = await message.downloadMedia();
-      decodedData = { media };
-      // do something with the media data here
-    }
+//decodedData
+function start(client) {
+  console.log("+++++++++");
+  client.onMessage(async (message) => {
+    //console.log(message)
+    let decodedData = {};
     if (message.isMedia === true || message.isMMS === true) {
       // || message.mimetype == 'audio/ogg; codecs=opus' || (typeof message.mimetype !='undefined' && message.mimetype.match(/pdf/))
       const buffer = await client.decryptFile(message);
@@ -131,45 +114,40 @@ client.on("message", async (message) => {
         message.from + `some-file-name.${mime.extension(message.mimetype)}`;
       decodedData = { fileName, buffer: buffer.toString("base64") };
     }
-  } catch (e) {
-    console.log(e);
-  }
-  console.log("=>");
-  rmq.sendMessage("from" + phoneNumber, "aaa", {
-    app: "whatsapp",
-    id: phoneNumber,
-    event: "message",
-    data: { ...message, decodedData },
+    console.log("=>");
+    rmq.sendMessage("from" + phoneNumber, "aaa", {
+      app: "whatsapp",
+      id: phoneNumber,
+      event: "message",
+      data: { ...message, decodedData },
+    });
+    if (typeof message.mimetype !== "undefined") console.log(message.mimetype);
   });
-  if (typeof message.mimetype !== "undefined") console.log(message.mimetype);
-});
-
-client.on("onStateChange", (state) => {
-  rmq.sendMessage("from" + phoneNumber, "aaa", {
-    app: "whatsapp",
-    id: phoneNumber,
-    event: "StateChange",
-    data: { ...state },
+  client.onStateChange((state) => {
+    rmq.sendMessage("from" + phoneNumber, "aaa", {
+      app: "whatsapp",
+      id: phoneNumber,
+      event: "StateChange",
+      data: { ...state },
+    });
   });
-});
-client.on("onAck", (ack) => {
-  rmq.sendMessage("from" + phoneNumber, "aaa", {
-    app: "whatsapp",
-    id: phoneNumber,
-    event: "ack",
-    data: { ...ack },
+  client.onAck((ack) => {
+    rmq.sendMessage("from" + phoneNumber, "aaa", {
+      app: "whatsapp",
+      id: phoneNumber,
+      event: "ack",
+      data: { ...ack },
+    });
   });
-});
-client.on("onAddedToGroup", (chatEvent) => {
-  rmq.sendMessage("from" + phoneNumber, "aaa", {
-    app: "whatsapp",
-    id: phoneNumber,
-    event: "AddedToGroup",
-    data: { ...chatEvent },
+  client.onAddedToGroup((chatEvent) => {
+    rmq.sendMessage("from" + phoneNumber, "aaa", {
+      app: "whatsapp",
+      id: phoneNumber,
+      event: "AddedToGroup",
+      data: { ...chatEvent },
+    });
   });
-});
-
-client.initialize();
+}
 
 async function privateMsg(msg) {
   console.log("MSG PRIVATE");
@@ -179,6 +157,7 @@ async function privateMsg(msg) {
       " >>> " +
       (MQdata.data.text ? MQdata.data.text : MQdata.data.repl)
   );
+  await WappClient.sen;
   await WappClient.sendText(
     MQdata.data.original.author,
     MQdata.data.text ? MQdata.data.text : MQdata.data.repl
@@ -189,6 +168,84 @@ async function privateMsg(msg) {
     .catch((erro) => {
       console.error("Error when sending: ", erro); //return object error
     });
+}
+
+async function evalonwebz(c) {
+  var result = await WappClient.page.evaluate(async (c) => {
+    console.log("exec " + c);
+
+    const waitEval = (ev) => {
+      console.log("waitEval " + ev);
+      return new Promise((resolve, reject) => {
+        eval(ev);
+      });
+    };
+    return await waitEval(c);
+  }, c);
+  console.log("solved result");
+  console.log(result);
+  return JSON.parse(result);
+}
+
+async function evalonwebw(code) {
+  return await WappClient.page.evaluate(async (code) => {
+    //return await new Promise((resolve) => {
+    console.log(">>>>>>====" + code);
+    //return await
+    var codeex = eval(code);
+    console.log(codeex);
+    return codeex;
+    //	resolve('ok');
+    //	})
+  }, code);
+}
+
+async function evalonweb(code) {
+  WappClient.page.evaluate((code) => {
+    eval(code);
+  }, code);
+}
+
+async function evalonwebr(code) {
+  return WappClient.page.evaluate((code) => {
+    return eval(code);
+  }, code);
+}
+
+async function addclient(clientid) {
+  WappClient.page.evaluate((clientid) => {
+    window.Store.Chat.add(clientid.replace("@c.us", "") + "@s.whatsapp.net");
+  }, clientid);
+}
+
+async function sendMsgg(to, msg) {
+  WappClient.page.evaluate(
+    (to, msg) => {
+      window.WAPI.sendMessage2(to, msg);
+    },
+    to,
+    msg
+  );
+}
+WappClient.evalonwebz = evalonwebz;
+WappClient.evalonwebw = evalonwebw;
+WappClient.evalonwebr = evalonwebr;
+WappClient.evalonweb = evalonweb;
+WappClient.sendMsgg = sendMsgg;
+WappClient.addclient = addclient;
+async function getAllGroups(client) {
+  let grupos = [];
+  let chats = await client.getAllChats();
+  for (chat of chats) {
+    if (chat.isGroup) grupos.push(chat);
+  }
+  return grupos;
+}
+
+function delay(time) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time);
+  });
 }
 
 async function sendMsg(msg) {
@@ -249,8 +306,7 @@ async function sendMsg(msg) {
         res(result);
         //eval('WappClient.'+MQdata.exec+'.then((await result) => {console.log(result); res(result)}).catch((erro) => {console.error(\'Error when sending '+MQdata.exec+': \', erro); })');
       });
-      console.log("response >>>");
-      console.log(respo);
+      console.log(">" + respo);
       rmq.sendMessage(
         MQdata.returnto ? MQdata.returnto : "from" + phoneNumber,
         "aaa",
@@ -306,10 +362,10 @@ async function sendMsg(msg) {
       id: "" + MQdata.data.original.id,
     });
     /*	await WappClient.reply(
-                MQdata.data.original.author,
-                (MQdata.data.text?MQdata.data.text:MQdata.data.repl),
-                ""+MQdata.data.original.id
-            )*/
+			MQdata.data.original.author,
+			(MQdata.data.text?MQdata.data.text:MQdata.data.repl),
+			""+MQdata.data.original.id
+		)*/
 
     await WappClient.sendMessageOptions(
       MQdata.data.original.author,
@@ -325,35 +381,4 @@ async function sendMsg(msg) {
         console.error("Error when sending: ", erro); //return object error
       });
   } else privateMsg(msg);
-}
-
-async function evalonwebz(c) {
-  var result = await WappClient.pupPage.evaluate(async (c) => {
-    console.log("exec " + c);
-
-    const waitEval = (ev) => {
-      console.log("waitEval " + ev);
-      return new Promise((resolve, reject) => {
-        eval(ev);
-      });
-    };
-    return await waitEval(c);
-  }, c);
-  console.log("solved result");
-  console.log(result);
-  return JSON.parse(result);
-}
-
-async function sendImage(to, b64, name, text) {
-  var media = await new MessageMedia(
-    "image/jpg",
-    b64.replace(/^.*\;base64\,/, ""),
-    name || "myimage.jpg"
-  );
-  await client.sendMessage(to, media, { caption: text });
-}
-
-async function sendMed(to, mimetype, b64, name, text) {
-  var media = await new MessageMedia(mimetype, b64, name || "myimage.jpg");
-  await client.sendMessage(to, media, { caption: text });
 }

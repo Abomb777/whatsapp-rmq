@@ -43,7 +43,7 @@
     "dotenv": "^16.0.2",
     "fs": "0.0.1-security",
     "venom-bot": "^4.3.0",
-    "whatsapp-web.js": "^1.17.1",
+    "whatsapp-web.js": "^1.18.2",
     "yargs": "^17.3.1"
   },
   "devDependencies": {
